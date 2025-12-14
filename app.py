@@ -18,7 +18,7 @@ st.markdown("### Visualisasi Algoritma Pengurutan Data (Pivot dan Partisi)")
 st.sidebar.header("Konfigurasi Data")
 
 # --- Input Pengguna ---
-default_data = "45, 12, 90, 3, 55, 18, 70"
+default_data = "45, 12, 90, 3, 55, 18, 70, 1000" # Contoh data dengan angka besar
 input_data_str = st.sidebar.text_input(
     "Masukkan data (pisahkan dengan koma):", 
     default_data
@@ -27,10 +27,11 @@ speed = st.sidebar.slider("Kecepatan Simulasi (detik)", 0.1, 2.0, 0.5)
 
 # --- Proses Data Input ---
 try:
+    # Memastikan input adalah INTEGER
     data_list = [int(x.strip()) for x in input_data_str.split(',') if x.strip()]
     initial_data = list(data_list)
 except ValueError:
-    st.error("Masukkan data dalam format angka yang dipisahkan oleh koma (misalnya: 10, 5, 8).")
+    st.error("Masukkan data dalam format angka (integer) yang dipisahkan oleh koma (misalnya: 10, 5, 8).")
     st.stop()
     
 # --- Penjelasan ---
@@ -44,7 +45,6 @@ st.write(f"**Data Awal:** {initial_data}")
 # --- Visualisasi Awal ---
 if st.button("Mulai Simulasi Quick Sort"):
     
-    # PENTING: Kirim data_list sebagai salinan baru
     sorted_data, history = quick_sort(list(data_list))
     
     st.markdown("---")
@@ -66,10 +66,10 @@ if st.button("Mulai Simulasi Quick Sort"):
             # Tentukan warna berdasarkan status:
             'Tipe': [
                 # Pivot Aktif: Selalu di posisi end_range selama partisi
-                'Pivot Aktif' if i == end_range and action_type in ('Pilih Pivot', 'Bandingkan') else
-                # Elemen Aktif: Elemen yang sedang dibandingkan (j) atau ditukar (i)
+                'Pivot Aktif' if i == end_range and action_type in ('Pilih Pivot', 'Bandingkan', 'Tukar') else
+                # Elemen Aktif: Elemen yang sedang dibandingkan/ditukar (i atau j)
                 'Elemen Aktif' if i == highlight_idx and action_type in ('Tukar', 'Bandingkan') else 
-                # Pivot Final: Pivot di posisi akhirnya (highlight_idx = i + 1)
+                # Pivot Final: Pivot di posisi akhirnya
                 'Pivot Final' if i == highlight_idx and action_type == 'Pivot Final' else
                 'Normal'
                 for i in range(len(current_array))
