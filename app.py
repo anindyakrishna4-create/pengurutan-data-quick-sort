@@ -44,6 +44,7 @@ st.write(f"**Data Awal:** {initial_data}")
 # --- Visualisasi Awal ---
 if st.button("Mulai Simulasi Quick Sort"):
     
+    # PENTING: Kirim data_list sebagai salinan baru
     sorted_data, history = quick_sort(list(data_list))
     
     st.markdown("---")
@@ -64,8 +65,11 @@ if st.button("Mulai Simulasi Quick Sort"):
             'Nilai': current_array,
             # Tentukan warna berdasarkan status:
             'Tipe': [
-                'Pivot Aktif' if i == end_range and action_type in ('Pilih Pivot', 'Bandingkan', 'Tukar') else # Pivot selalu di highlight_idx/end_range
+                # Pivot Aktif: Selalu di posisi end_range selama partisi
+                'Pivot Aktif' if i == end_range and action_type in ('Pilih Pivot', 'Bandingkan') else
+                # Elemen Aktif: Elemen yang sedang dibandingkan (j) atau ditukar (i)
                 'Elemen Aktif' if i == highlight_idx and action_type in ('Tukar', 'Bandingkan') else 
+                # Pivot Final: Pivot di posisi akhirnya (highlight_idx = i + 1)
                 'Pivot Final' if i == highlight_idx and action_type == 'Pivot Final' else
                 'Normal'
                 for i in range(len(current_array))
