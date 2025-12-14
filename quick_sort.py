@@ -17,7 +17,7 @@ def quick_sort(data_list):
     _quick_sort_recursive(data_to_sort, 0, len(data_to_sort) - 1)
     
     # Tambahkan state terakhir (selesai)
-    # Highlight: 4 elemen konsisten (start, end, pivot_idx, status_aksi)
+    # Highlight: 4 elemen konsisten (-1, -1, -1, 'Selesai')
     HISTORY.append({'array': data_to_sort[:], 'highlight': (-1, -1, -1, 'Selesai'), 'action': 'Pengurutan Selesai'})
     
     # Kembalikan array yang sudah terurut.
@@ -40,19 +40,20 @@ def _partition(arr, low, high):
     i = low - 1  # Indeks elemen yang lebih kecil
 
     # Catat state saat memilih Pivot
+    # Highlight: (low, high, index_pivot, status_aksi)
     HISTORY.append({
         'array': arr[:],
-        'highlight': (low, high, high, 'Pilih Pivot'), # high adalah index pivot
+        'highlight': (low, high, high, 'Pilih Pivot'), 
         'action': f'Memulai Partisi: Rentang [{low}-{high}]. Pivot: {pivot} di Indeks {high}'
     })
     
     # Loop melalui elemen dari low hingga high-1
     for j in range(low, high):
         
-        # Catat state saat Membandingkan (Highlight Pivot dan Elemen saat ini)
+        # Catat state saat Membandingkan. HIGHLIGHT INDEX J (elemen yang dibandingkan)
         HISTORY.append({
             'array': arr[:],
-            'highlight': (low, high, high, 'Bandingkan'), 
+            'highlight': (low, high, j, 'Bandingkan'), # J: Elemen yang dibandingkan
             'action': f'Bandingkan Indeks {j} ({arr[j]}) dengan Pivot {pivot}'
         })
         
@@ -64,10 +65,10 @@ def _partition(arr, low, high):
             # Tukar arr[i] dan arr[j]
             arr[i], arr[j] = arr[j], arr[i]
             
-            # Catat state setelah Penukaran
+            # Catat state setelah Penukaran. HIGHLIGHT INDEX I (yang menerima)
             HISTORY.append({
                 'array': arr[:],
-                'highlight': (low, high, high, 'Tukar'), # high: Pivot, i dan j: Elemen yang ditukar
+                'highlight': (low, high, i, 'Tukar'), # I: Elemen yang baru saja ditukar
                 'action': f'Tukar {arr[j]} (Indeks {j}) dengan {arr[i]} (Indeks {i})'
             })
             
